@@ -17,7 +17,7 @@ if "openai_model" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-with st.chat_message("assistant"):
+if len(st.session_state.messages) == 0:
     message_placeholder = st.empty()
     full_response = ""
     assistant_response = '您好，我是您的AI助手，使用GPT3.5提供服务，您可以向我提问任何问题~'
@@ -26,10 +26,11 @@ with st.chat_message("assistant"):
         time.sleep(0.01)
         message_placeholder.markdown(full_response + "_")
     message_placeholder.markdown(full_response)
-
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
+else:
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
 if prompt := st.chat_input(""):
     st.session_state.messages.append({"role": "user", "content": prompt})
