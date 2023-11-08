@@ -3,12 +3,14 @@ import streamlit as st
 import time
 
 st.set_page_config(
-   page_title="您好世界",
+   page_title="您好世界~",
    page_icon="🧊"
 )
 
 client = OpenAI(
+    #base_url = 'http://fxai.kugou.net/ai/proxy/openai/v1',
     api_key = st.secrets["APP_KEY"]
+    #api_key = 'enDi7ZDdsKalxY6IDkMY+g=='
 )
 
 if "openai_model" not in st.session_state:
@@ -36,22 +38,23 @@ else:
 if prompt := st.chat_input(""):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
+        prompt = prompt.replace('\n', '  \n')
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
+        message_placeholder.markdown('正在思考...')
         full_response = ""
         for response in client.chat.completions.create(
-            model=st.session_state["openai_model"],
-            messages=[
+            model = st.session_state["openai_model"],
+            messages = [
                 {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
+                for m in st.session_state.messages[-5:]
             ],
-            stream=True,
+            stream=True
         ):
             res_tmp = response.choices[0].delta.content
-            if res_tmp:
-                full_response += res_tmp
+            full_response += res_tmp if res_tmp is not None else ''
             message_placeholder.markdown(full_response + "_")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
