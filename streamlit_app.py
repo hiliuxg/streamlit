@@ -20,7 +20,7 @@ if "messages" not in st.session_state:
 with st.chat_message("assistant"):
     message_placeholder = st.empty()
     full_response = ""
-    assistant_response = '您好，我是您的AI助手，使用GPT3.5提供服务，您可以向我提问任何问题'
+    assistant_response = '您好，我是您的AI助手，使用GPT3.5提供服务，您可以向我提问任何问题~'
     for chunk in assistant_response.split():
         full_response += chunk + " "
         time.sleep(0.08)
