@@ -18,14 +18,15 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if len(st.session_state.messages) == 0:
-    message_placeholder = st.empty()
-    full_response = ""
-    assistant_response = '您好，我是您的AI助手，使用GPT3.5提供服务，您可以向我提问任何问题~'
-    for chunk in assistant_response:
-        full_response += chunk + " "
-        time.sleep(0.01)
-        message_placeholder.markdown(full_response + "_")
-    message_placeholder.markdown(full_response)
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        assistant_response = '您好，我是您的AI助手，使用GPT3.5提供服务，您可以向我提问任何问题~'
+        for chunk in assistant_response:
+            full_response += chunk + " "
+            time.sleep(0.01)
+            message_placeholder.markdown(full_response + "_")
+        message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
 else:
     for message in st.session_state.messages:
