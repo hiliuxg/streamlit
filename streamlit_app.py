@@ -36,9 +36,9 @@ else:
             st.markdown(message["content"])
 
 if prompt := st.chat_input(""):
+    prompt = prompt.replace('\n', '  \n')
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
-        prompt = prompt.replace('\n', '  \n')
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
